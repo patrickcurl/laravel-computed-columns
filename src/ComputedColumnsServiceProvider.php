@@ -2,8 +2,8 @@
 
 namespace ComputedColumns;
 
-use Illuminate\Support\Facades\DB;
 use ComputedColumns\Database\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
