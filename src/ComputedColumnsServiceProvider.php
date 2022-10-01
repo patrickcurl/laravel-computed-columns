@@ -2,10 +2,10 @@
 
 namespace ComputedColumns;
 
+use Illuminate\Support\Facades\DB;
+use ComputedColumns\Database\Blueprint;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use ComputedColumns\Database\Blueprint;
-use Illuminate\Support\Facades\DB;
 
 class ComputedColumnsServiceProvider extends PackageServiceProvider
 {

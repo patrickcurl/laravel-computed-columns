@@ -2,9 +2,9 @@
 
 namespace ComputedColumns\ComputedColumns\Tests;
 
+use ComputedColumns\ComputedColumns\ComputedColumnsServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use ComputedColumns\ComputedColumns\ComputedColumnsServiceProvider;
 
 class TestCase extends Orchestra
 {

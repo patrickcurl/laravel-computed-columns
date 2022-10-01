@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace ComputedColumns\Database\Concerns;
 
-use Exception;
-use Illuminate\Support\Facades\DB;
 use ComputedColumns\Database\Blueprint;
 use Illuminate\Database\Concerns\CompilesJsonPaths;
+use Illuminate\Support\Facades\DB;
 
 trait HasModifiersAndWrappers
 {

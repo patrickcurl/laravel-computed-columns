@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace ComputedColumns\Database\Schema;
 
 use ComputedColumns\Database\Blueprint;
-use Illuminate\Database\Schema\Builder as SchemaBuilder;
 use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
+use Illuminate\Database\Schema\Builder as SchemaBuilder;
 
 class Builder extends SchemaBuilder
 {
