@@ -4,7 +4,6 @@ namespace ComputedColumns;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use ComputedColumns\Commands\ComputedColumnsCommand;
 use ComputedColumns\Database\Blueprint;
 use Illuminate\Support\Facades\DB;
 
@@ -18,11 +17,7 @@ class ComputedColumnsServiceProvider extends PackageServiceProvider
          * More info: https://github.com/spatie/laravel-package-tools
          */
         $package
-            ->name('laravel-computed-columns')
-            ->hasConfigFile()
-            ->hasViews()
-            ->hasMigration('create_laravel-computed-columns_table')
-            ->hasCommand(ComputedColumnsCommand::class);
+            ->name('laravel-computed-columns');
     }
 
     public function boot()
