@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace ComputedColumns\ComputedColumns\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class ComputedColumnsCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-computed-columns';
 
     public $description = 'My command';
 

@@ -1,26 +1,29 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "patrickcurl/laravel-computed-columns",
+    "description": "Adds the methods: md5AsComputed, jsonFieldStoredAs, manyJsonFieldsStoredAs, concatWsStoredAs. ",
     "keywords": [
-        ":vendor_name",
+        "patrickcurl",
         "laravel",
-        ":package_slug"
+        "laravel-computed-columns"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/patrickcurl/laravel-computed-columns",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Patrick Curl",
+            "email": "patrickwcurl@gmail.com",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^8.1",
         "spatie/laravel-package-tools": "^1.13.0",
-        "illuminate/contracts": "^9.0"
+        "illuminate/contracts": "^9.0",
+        "illuminate/database": "^9.0",
+        "illuminate/support": "^9.0"
     },
     "require-dev": {
+        "laravel/framework": "^9.33",
         "laravel/pint": "^1.0",
         "nunomaduro/collision": "^6.0",
         "nunomaduro/larastan": "^2.0.1",
@@ -35,13 +38,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories"
+            "ComputedColumns\\": "src",
+            "ComputedColumns\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "ComputedColumns\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -51,15 +54,19 @@
         "format": "vendor/bin/pint"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "ComputedColumns\\ComputedColumnsServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "ComputedColumns": "ComputedColumns\\Facades\\ComputedColumns"
             }
         }
     },
