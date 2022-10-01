@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace ComputedColumns\Database;
 
-use Illuminate\Database\Schema\ColumnDefinition;
 use ComputedColumns\Database\Concerns\HasModifiersAndWrappers;
 use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
+use Illuminate\Database\Schema\ColumnDefinition;
 
 class Blueprint extends BaseBlueprint
 {

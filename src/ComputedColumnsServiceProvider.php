@@ -2,11 +2,11 @@
 
 namespace ComputedColumns;
 
-use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
 use ComputedColumns\Commands\ComputedColumnsCommand;
 use ComputedColumns\Database\Blueprint;
 use Illuminate\Support\Facades\DB;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class ComputedColumnsServiceProvider extends PackageServiceProvider
 {
