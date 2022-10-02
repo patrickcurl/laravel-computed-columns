@@ -7,6 +7,20 @@
 
 This package is an extension to laravel migrations to add some more optimized virtual/storedAs fields based on common use cases (at least my own);
 
+## Support us
+
+## Installation
+
+You can install the package via composer:
+
+```bash
+composer require patrickcurl/laravel-computed-columns
+```
+
+You can publish and run the migrations with:
+
+## Usage
+
 I'm planning on better documentation but the simplest way to jump in is look at some code.
 
 ```php
@@ -41,9 +55,10 @@ return new class() extends Migration {
             $table->id();
             $table->json('data')->nullable();
 
-            $table->manyJsonFieldsStoredAs(
+            $table->computedJsonColumns( // notice the plurality of columns.
+                'stored' // the type, accepts: 'stored' and 'virtual'
                 'data', // the json column to extract data from.
-                [
+                [ // The fields in the data json object to convert to computed fields.
                     'type',
                     'country',
                     'country_code',
@@ -63,12 +78,13 @@ return new class() extends Migration {
 
 
             // concatWsStoredAs($column, $default, $separator, ...$fields)
-            $table->concatWsStoredAs(
-                'label',
-                'data->label',
-                ', ',
-                'city',
-                'state',
+            $table->computedConcatWsColumn(
+                'stored' // type
+                'label', // computed column name
+                'data->label', // json path default value if other sources come up null.
+                ', ', // separator
+                'city', // ...$fields|$fields[] which fields on data to convert from:
+                'state', // e.g. state will give you $model->state === $model->data->state;
                 'country',
                 'postcode'
             ); // This will use the default if it exists, otherwise it'll create a default either from json nested keys where fields are ['data->city', 'data->state', etc....];
@@ -76,7 +92,19 @@ return new class() extends Migration {
             // This one simply creates an id, my location example basically does a lookup of data via openstreetmaps, and caches the label, and then if someone adds that to their profile as their location it'll pull it all in at that point either from the api, or the cache, or an existing location as we're only dealing with city/state not actual full addresses.
 
             // This isn't the most secure thing, for an id that's not critical that it's secret this is fine, but I wouldn't use it to hash passwords!
-            $table->md5StoredAs('uid', 'label');
+            $table->computedMd5Column(
+                'stored', // type
+                'uid', // column
+                'label' // label column will be used, could also use data->label to use the original json to map from.
+            );
+
+            // alternately I could've used :
+            $table->computedWrappedColumn(
+                'stored',
+                'MD5',
+                'uid',
+                'label'
+            ) ;
 
             $table->timestamps();
         });
@@ -89,57 +117,6 @@ return new class() extends Migration {
         });
     }
 };
-
-
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-computed-columns.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-computed-columns)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
-
-## Installation
-
-You can install the package via composer:
-
-```bash
-composer require patrickcurl/laravel-computed-columns
-```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="laravel-computed-columns-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="laravel-computed-columns-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="laravel-computed-columns-views"
-```
-
-## Usage
-
-```php
-$computedColumns = new ComputedColumns\ComputedColumns();
-echo $computedColumns->echoPhrase('Hello, ComputedColumns!');
-```
 
 ## Testing
 

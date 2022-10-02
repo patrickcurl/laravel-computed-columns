@@ -7,26 +7,11 @@ namespace ComputedColumns\Database\Concerns;
 use ComputedColumns\Database\Blueprint;
 use Illuminate\Database\Concerns\CompilesJsonPaths;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 trait HasModifiersAndWrappers
 {
     use CompilesJsonPaths;
-
-    protected function concatWsFields(array|string $fields, $separator = ' '): string
-    {
-        $concatFields = \is_string($fields) ? $fields : '';
-        if (\is_array($fields)) {
-            if (\count($fields) === 1 && \is_array($fields[0])) {
-                $fields = $fields[0];
-            }
-            foreach ($fields as $key => $field) {
-                $start = $key > 0 ? ', ' : '';
-                $concatFields .= $start.$this->wrap($field);
-            }
-        }
-
-        return "CONCAT_WS('{$separator}', {$concatFields})";
-    }
 
     public static function getWrappedFields(array | string $fields)
     {
@@ -74,16 +59,36 @@ trait HasModifiersAndWrappers
         return \is_string($value) ? $grammar->wrap($value) : $value;
     }
 
-    /**
-     * Wrap the given JSON selector.
-     *
-     * @param  string  $value
-     * @return string
-     */
-    protected function wrapJsonSelector($value)
-    {
-        [$field, $path] = $this->wrapJsonFieldAndPath($value);
+    public function concatWsSql($separator, ...$columns){
+        $sql = "CONCAT_WS('{$separator}', ";
+        $sql .= implode(', ', $columns);
+        $sql .= ')';
+        return $sql;
+    }
 
-        return 'json_unquote(json_extract('.$field.$path.'))';
+    protected function jsonColumnSql(string $path, $nullable) : string{
+        $sql = $this->wrap($path);
+        if ($nullable === true) {
+            return $this->ifNull($sql, '');
+        }
+        return $sql;
+    }
+
+
+
+    protected function addComputedColumn($type, $column, $sql){
+        if(in_array($type, ['virtual', 'stored'])){
+            throw new Throwable("Type of computed column must be either virtual or stored.", 1);
+        }
+        $tableColumn = $this->string($column);
+        if ($type === 'virtual') {
+            return $tableColumn->virtualAs($sql);
+        }
+        return $tableColumn->storedAs($sql);
+    }
+
+
+    public function wrapSql(string $sqlFunc, string $sql): string{
+        return "{$sqlFunc}({$sql})";
     }
 }
