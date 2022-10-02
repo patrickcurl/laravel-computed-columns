@@ -59,36 +59,40 @@ trait HasModifiersAndWrappers
         return \is_string($value) ? $grammar->wrap($value) : $value;
     }
 
-    public function concatWsSql($separator, ...$columns){
+    public function concatWsSql($separator, ...$columns)
+    {
         $sql = "CONCAT_WS('{$separator}', ";
         $sql .= implode(', ', $columns);
         $sql .= ')';
+
         return $sql;
     }
 
-    protected function jsonColumnSql(string $path, $nullable) : string{
+    protected function jsonColumnSql(string $path, $nullable): string
+    {
         $sql = $this->wrap($path);
         if ($nullable === true) {
             return $this->ifNull($sql, '');
         }
+
         return $sql;
     }
 
-
-
-    protected function addComputedColumn($type, $column, $sql){
-        if(in_array($type, ['virtual', 'stored'])){
-            throw new Throwable("Type of computed column must be either virtual or stored.", 1);
+    protected function addComputedColumn($type, $column, $sql)
+    {
+        if (in_array($type, ['virtual', 'stored'])) {
+            throw new Throwable('Type of computed column must be either virtual or stored.', 1);
         }
         $tableColumn = $this->string($column);
         if ($type === 'virtual') {
             return $tableColumn->virtualAs($sql);
         }
+
         return $tableColumn->storedAs($sql);
     }
 
-
-    public function wrapSql(string $sqlFunc, string $sql): string{
+    public function wrapSql(string $sqlFunc, string $sql): string
+    {
         return "{$sqlFunc}({$sql})";
     }
 }
