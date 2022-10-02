@@ -29,7 +29,7 @@ class Blueprint extends BaseBlueprint
     {
 
         $sql = $this->jsonColumnSql($path, $nullable);
-        return $this->addComputed($type, $column, $sql);
+        return $this->addComputedColumn($type, $column, $sql);
     }
 
     public function computedJsonColumns(
@@ -56,7 +56,7 @@ class Blueprint extends BaseBlueprint
             $this->concatWsSql($separator, ...$columns),
             $this->wrap($default)
         );
-        return $this->addComputed($type, $column, $sql);
+        return $this->addComputedColumn($type, $column, $sql);
     }
 
     public function computedMd5Column(string $type, string $column, string $path): ColumnDefinition
