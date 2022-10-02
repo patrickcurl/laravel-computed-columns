@@ -7,7 +7,7 @@ namespace ComputedColumns\Database\Concerns;
 use ComputedColumns\Database\Blueprint;
 use Illuminate\Database\Concerns\CompilesJsonPaths;
 use Illuminate\Support\Facades\DB;
-use Throwable;
+use Exception;
 
 trait HasModifiersAndWrappers
 {
@@ -81,7 +81,7 @@ trait HasModifiersAndWrappers
     protected function addComputedColumn($type, $column, $sql)
     {
         if (in_array($type, ['virtual', 'stored'])) {
-            throw new Throwable('Type of computed column must be either virtual or stored.', 1);
+            throw new Exception('Type of computed column must be either virtual or stored.', 1);
         }
         $tableColumn = $this->string($column);
         if ($type === 'virtual') {
