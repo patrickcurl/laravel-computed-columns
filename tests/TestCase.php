@@ -31,7 +31,7 @@ class TestCase extends Orchestra
         $migrations = [
             'locations' => include __DIR__.'/../database/migrations/create_locations_table.php',
         ];
-        foreach($migrations as $migration){
+        foreach ($migrations as $migration) {
             $migration->up();
         }
         /*
