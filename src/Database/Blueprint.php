@@ -7,8 +7,6 @@ namespace ComputedColumns\Database;
 use ComputedColumns\Database\Concerns\HasModifiersAndWrappers;
 use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
 use Illuminate\Database\Schema\ColumnDefinition;
-use Exception;
-use Throwable;
 
 class Blueprint extends BaseBlueprint
 {
@@ -22,12 +20,12 @@ class Blueprint extends BaseBlueprint
     ): ColumnDefinition {
         $path = $this->wrap($path);
         $sql = $this->wrapSql($sqlFunc, $path);
+
         return $this->addComputedColumn($type, $column, $sql);
     }
 
     public function computedJsonColumn(string $type, string $column, string $path, bool $nullable): ColumnDefinition
     {
-
         $sql = $this->jsonColumnSql($path, $nullable);
         return $this->addComputedColumn($type, $column, $sql);
     }
@@ -42,6 +40,7 @@ class Blueprint extends BaseBlueprint
         foreach ($columns as $column) {
             $this->computedJsonColumn($type, $column, $path, $nullable);
         }
+
         return $this;
     }
 
