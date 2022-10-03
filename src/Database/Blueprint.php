@@ -1,12 +1,11 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace ComputedColumns\Database;
 
-use ComputedColumns\Database\Concerns\HasModifiersAndWrappers;
-use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
+use Exception;
 use Illuminate\Database\Schema\ColumnDefinition;
+use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
+use ComputedColumns\Database\Concerns\HasModifiersAndWrappers;
 
 class Blueprint extends BaseBlueprint
 {
@@ -17,16 +16,16 @@ class Blueprint extends BaseBlueprint
         string $sqlFunc,
         string $column,
         string $path
-    ): ColumnDefinition {
+    ) : ColumnDefinition {
         $path = $this->wrap($path);
-        $sql = $this->wrapSql($sqlFunc, $path);
+        $sql  = $this->wrapSql($sqlFunc, $path);
 
         return $this->addComputedColumn($type, $column, $sql);
     }
 
-    public function computedJsonColumn(string $type, string $column, string $path, bool $nullable): ColumnDefinition
+    public function computedJsonColumn(string $type, string $column, string $path, bool $nullable = false) : ColumnDefinition
     {
-        $sql = $this->jsonColumnSql($path, $nullable);
+        $sql = $this->jsonColumnSql($path, true);
 
         return $this->addComputedColumn($type, $column, $sql);
     }
@@ -36,10 +35,10 @@ class Blueprint extends BaseBlueprint
         string $path,
         array $columns,
         bool $nullable = false
-    ): Blueprint {
+    ) : self {
         $computed = [];
         foreach ($columns as $column) {
-            $this->computedJsonColumn($type, $column, $path, $nullable);
+            $this->computedJsonColumn($type, $column, "{$path}->{$column}", $nullable);
         }
 
         return $this;
@@ -51,7 +50,7 @@ class Blueprint extends BaseBlueprint
         string $default,
         string $separator = ', ',
         string|array ...$columns
-    ): ColumnDefinition {
+    ) : ColumnDefinition {
         $sql = $this->ifNull(
             $this->concatWsSql($separator, ...$columns),
             $this->wrap($default)
@@ -60,8 +59,21 @@ class Blueprint extends BaseBlueprint
         return $this->addComputedColumn($type, $column, $sql);
     }
 
-    public function computedMd5Column(string $type, string $column, string $path): ColumnDefinition
+    public function computedMd5Column(string $type, string $column, string $path) : ColumnDefinition
     {
         return $this->computedWrappedColumn($type, 'MD5', $column, $path);
+    }
+
+    protected function addComputedColumn($type, $column, $sql)
+    {
+        if (!\in_array($type, ['virtual', 'stored'], true)) {
+            throw new Exception('Type of computed column must be either virtual or stored.', 1);
+        }
+        $tableColumn = $this->string($column);
+        if ($type === 'virtual') {
+            return $tableColumn->virtualAs($sql);
+        }
+
+        return $tableColumn->storedAs($sql);
     }
 }

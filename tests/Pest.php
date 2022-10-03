@@ -1,5 +1,5 @@
-<?php
+<?php declare(strict_types=1);
 
-use ComputedColumns\ComputedColumns\Tests\TestCase;
+use ComputedColumns\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);

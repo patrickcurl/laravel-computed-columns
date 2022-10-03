@@ -2,6 +2,7 @@
 
 require_once __DIR__.'/vendor/autoload.php';
 
+use Zvive\Fixer\Finders\LaravelPackageFinder;
 use Zvive\Fixer\SharedConfig;
 use Zvive\Fixer\Rulesets\ZviveRuleset;
 
