@@ -69,7 +69,7 @@ class Blueprint extends BaseBlueprint
         if (!\in_array($type, ['virtual', 'stored'], true)) {
             throw new Exception('Type of computed column must be either virtual or stored.', 1);
         }
-        $tableColumn = $this->string($column);
+        $tableColumn = $this->string($column, 255);
         if ($type === 'virtual') {
             return $tableColumn->virtualAs($sql);
         }
